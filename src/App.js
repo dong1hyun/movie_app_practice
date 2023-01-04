@@ -1,37 +1,22 @@
-import { useEffect, useState } from "react"
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+} from "react-router-dom"
+import Detail from "./routes/Detail";
+import Home from "./routes/Home"
+
 
 function App() {
-  const [loading, setLoading] = useState(true);
-  const [coins, setCoins] = useState([]);
-  const [USD, setUSD] = useState(0);
-  const onChange = (event) => setUSD(event.target.value);
-  useEffect(() => {
-    fetch("https://api.coinpaprika.com/v1/tickers")
-      .then(res => res.json()) // JSON 응답을 JavaScript 객체 리터럴로 구문분석합니다.
-      .then(json => {
-        setCoins(json);
-        setLoading(false);
-      });
-  }, [])
   return (
-    <div>
-      <h1>The Coins! {loading ? "" : `(${coins.length})`}</h1>
-      {loading ? <strong>Loading...</strong> : (
-        <div>
-          <select>
-            {coins.map((coin) => (
-              <option key={coin.id}>
-                {coin.name} ({coin.symbol}): {coin.quotes.USD.price} USD
-              </option>
-            ))};
-          </select>
-          <h3>How much USD do you have</h3>
-          <input onChange={onChange} placeholder="USD" />
-          <h2>You can buy {Math.round(USD / coins[0].quotes.USD.price)} BTC</h2>
-        </div>
-      )}
-    </div>
-  );
+    //Routes는 Route(url)를 찾음 + 한 번에 Route하나만 렌더링 하기 위함 
+    <Router>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/movie/:id" element={<Detail />}/>
+      </Routes>
+    </Router>
+  )
 }
 
 export default App;
